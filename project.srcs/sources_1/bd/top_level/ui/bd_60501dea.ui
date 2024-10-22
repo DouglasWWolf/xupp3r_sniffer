@@ -1,0 +1,71 @@
+{
+   "ActiveEmotionalView":"No Loops",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-614,-153",
+   "DisplayTieOff":"1",
+   "ExpandedHierarchyInLayout":"",
+   "No Loops_ExpandedHierarchyInLayout":"",
+   "No Loops_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port axis_rx_a -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD
+preplace port axis_tx_b -pg 1 -lvl 3 -x 720 -y 200 -defaultsOSRD
+preplace port axis_tx_a -pg 1 -lvl 3 -x 720 -y 380 -defaultsOSRD
+preplace port axis_rx_b -pg 1 -lvl 0 -x 0 -y 320 -defaultsOSRD
+preplace port rx_out_a -pg 1 -lvl 0 -x 0 -y 80 -defaultsOSRD -left
+preplace port rx_out_b -pg 1 -lvl 0 -x 0 -y 340 -defaultsOSRD -left
+preplace port port-id_clk_a -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
+preplace port port-id_resetn_a -pg 1 -lvl 0 -x 0 -y 120 -defaultsOSRD
+preplace port port-id_clk_b -pg 1 -lvl 0 -x 0 -y 360 -defaultsOSRD
+preplace port port-id_resetn_b -pg 1 -lvl 0 -x 0 -y 380 -defaultsOSRD
+preplace port port-id_overflow_a -pg 1 -lvl 3 -x 720 -y 60 -defaultsOSRD
+preplace port port-id_overflow_b -pg 1 -lvl 3 -x 720 -y 560 -defaultsOSRD
+preplace inst axis_tee_a -pg 1 -lvl 1 -x 180 -y 60 -defaultsOSRD -pinDir axis_in left -pinY axis_in 0L -pinDir axis_out0 right -pinY axis_out0 0R -pinDir axis_out1 left -pinY axis_out1 20L -pinDir clk left -pinY clk 40L -pinDir resetn left -pinY resetn 60L
+preplace inst axis_tee_b -pg 1 -lvl 1 -x 180 -y 320 -defaultsOSRD -pinDir axis_in left -pinY axis_in 0L -pinDir axis_out0 right -pinY axis_out0 60R -pinDir axis_out1 left -pinY axis_out1 20L -pinDir clk left -pinY clk 40L -pinDir resetn left -pinY resetn 60L
+preplace inst fifo_monitor_a -pg 1 -lvl 2 -x 560 -y 60 -defaultsOSRD -pinDir stream left -pinY stream 0L -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinDir overflow right -pinY overflow 0R
+preplace inst fifo_monitor_b -pg 1 -lvl 2 -x 560 -y 560 -defaultsOSRD -pinDir stream left -pinY stream 0L -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinDir overflow right -pinY overflow 0R
+preplace inst axis_packetizer_a2b -pg 1 -lvl 2 -x 560 -y 200 -defaultsOSRD -pinDir m_axis right -pinY m_axis 0R -pinDir s_axis left -pinY s_axis 0L -pinDir s_axis_aclk left -pinY s_axis_aclk 20L -pinDir s_axis_aresetn left -pinY s_axis_aresetn 40L -pinDir m_axis_aclk left -pinY m_axis_aclk 60L -pinDir m_axis_aresetn left -pinY m_axis_aresetn 80L
+preplace inst axis_packetizer_b2a -pg 1 -lvl 2 -x 560 -y 380 -swap {0 1 2 3 4 5 6 7 8 9 10 11 14 15 12 13} -defaultsOSRD -pinDir m_axis right -pinY m_axis 0R -pinDir s_axis left -pinY s_axis 0L -pinDir s_axis_aclk left -pinY s_axis_aclk 60L -pinDir s_axis_aresetn left -pinY s_axis_aresetn 80L -pinDir m_axis_aclk left -pinY m_axis_aclk 20L -pinDir m_axis_aresetn left -pinY m_axis_aresetn 40L
+preplace netloc clk_a_1 1 0 2 40 180 420
+preplace netloc clk_b_1 1 0 2 40 440 340
+preplace netloc fifo_monitor_a_overflow 1 2 1 NJ 60
+preplace netloc fifo_monitor_b_overflow 1 2 1 NJ 560
+preplace netloc resetn_a_1 1 0 2 20 200 380
+preplace netloc resetn_b_1 1 0 2 20 460 360
+preplace netloc axis_packetizer_a2b_m_axis 1 2 1 NJ 200
+preplace netloc axis_packetizer_b2a_m_axis 1 2 1 NJ 380
+preplace netloc axis_rx_a_1 1 1 1 400 60n
+preplace netloc axis_rx_a_2 1 0 1 NJ 60
+preplace netloc axis_rx_b_1 1 1 1 320 380n
+preplace netloc axis_rx_b_2 1 0 1 NJ 320
+preplace netloc axis_tee_a_axis_out1 1 0 1 NJ 80
+preplace netloc axis_tee_b_axis_out1 1 0 1 NJ 340
+levelinfo -pg 1 0 180 560 720
+pagesize -pg 1 -db -bbox -sgen -120 0 850 660
+",
+   "No Loops_ScaleFactor":"1.0",
+   "No Loops_TopLeft":"-386,-12",
+   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port axis_rx_a -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD
+preplace port axis_tx_b -pg 1 -lvl 2 -x 320 -y 100 -defaultsOSRD
+preplace port axis_tx_a -pg 1 -lvl 2 -x 320 -y 280 -defaultsOSRD
+preplace port axis_rx_b -pg 1 -lvl 0 -x 0 -y 240 -defaultsOSRD
+preplace port port-id_clk_a -pg 1 -lvl 0 -x 0 -y 80 -defaultsOSRD
+preplace port port-id_resetn_a -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
+preplace port port-id_clk_b -pg 1 -lvl 0 -x 0 -y 120 -defaultsOSRD
+preplace port port-id_resetn_b -pg 1 -lvl 0 -x 0 -y 140 -defaultsOSRD
+preplace inst axis_packetizer_a2b -pg 1 -lvl 1 -x 160 -y 100 -defaultsOSRD
+preplace inst axis_packetizer_b2a -pg 1 -lvl 1 -x 160 -y 280 -defaultsOSRD
+preplace netloc clk_a_1 1 0 1 NJ 80
+preplace netloc resetn_a_1 1 0 1 NJ 100
+preplace netloc resetn_b_1 1 0 1 NJ 140
+preplace netloc clk_b_1 1 0 1 NJ 120
+preplace netloc axis_rx_a_1 1 0 1 NJ 60
+preplace netloc axis_packetizer_a2b_m_axis 1 1 1 N 100
+preplace netloc axis_packetizer_b2a_m_axis 1 1 1 N 280
+preplace netloc axis_rx_b_1 1 0 1 N 240
+levelinfo -pg 1 0 160 320
+pagesize -pg 1 -db -bbox -sgen -120 0 440 380
+"
+}
+0

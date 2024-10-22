@@ -1,0 +1,49 @@
+{
+   "ActiveEmotionalView":"No Loops",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-574,-142",
+   "DisplayTieOff":"1",
+   "ExpandedHierarchyInLayout":"",
+   "No Loops_ExpandedHierarchyInLayout":"",
+   "No Loops_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DST_AXI -pg 1 -lvl 3 -x 660 -y 60 -defaultsOSRD
+preplace port SRC_AXI -pg 1 -lvl 3 -x 660 -y 80 -defaultsOSRD
+preplace port S_AXI -pg 1 -lvl 0 -x 0 -y 140 -defaultsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x 0 -y 160 -defaultsOSRD
+preplace port port-id_resetn -pg 1 -lvl 0 -x 0 -y 180 -defaultsOSRD
+preplace inst data_mover -pg 1 -lvl 2 -x 490 -y 60 -defaultsOSRD -pinDir DST_AXI right -pinY DST_AXI 0R -pinDir SRC_AXI right -pinY SRC_AXI 20R -pinDir clk left -pinY clk 0L -pinDir resetn left -pinY resetn 20L -pinBusDir src_address left -pinBusY src_address 80L -pinBusDir dst_address left -pinBusY dst_address 100L -pinBusDir byte_count left -pinBusY byte_count 120L -pinBusDir burst_size left -pinBusY burst_size 140L -pinDir start left -pinY start 160L -pinDir idle left -pinY idle 180L
+preplace inst axi_data_mover -pg 1 -lvl 1 -x 190 -y 140 -defaultsOSRD -pinDir S_AXI left -pinY S_AXI 0L -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinBusDir src_address right -pinBusY src_address 0R -pinBusDir dst_address right -pinBusY dst_address 20R -pinBusDir byte_count right -pinBusY byte_count 40R -pinBusDir burst_size right -pinBusY burst_size 60R -pinDir start right -pinY start 80R -pinDir idle right -pinY idle 100R
+preplace netloc pcie_axi_aclk 1 0 2 20 60 NJ
+preplace netloc pcie_axi_aresetn 1 0 2 40 80 NJ
+preplace netloc axi_data_mover_0_src_address 1 1 1 N 140
+preplace netloc axi_data_mover_0_dst_address 1 1 1 N 160
+preplace netloc axi_data_mover_0_byte_count 1 1 1 N 180
+preplace netloc axi_data_mover_0_burst_size 1 1 1 N 200
+preplace netloc axi_data_mover_0_start 1 1 1 N 220
+preplace netloc dma_data_mover_idle 1 1 1 N 240
+preplace netloc data_mover_0_DST_AXI 1 2 1 NJ 60
+preplace netloc data_mover_0_SRC_AXI 1 2 1 NJ 80
+preplace netloc S_AXI_1 1 0 1 NJ 140
+levelinfo -pg 1 0 190 490 660
+pagesize -pg 1 -db -bbox -sgen -100 0 770 300
+",
+   "No Loops_ScaleFactor":"1.0",
+   "No Loops_TopLeft":"-415,-178",
+   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DST_AXI -pg 1 -lvl 3 -x 660 -y 90 -defaultsOSRD
+preplace port SRC_AXI -pg 1 -lvl 3 -x 660 -y 110 -defaultsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x 0 -y 50 -defaultsOSRD
+preplace port port-id_resetn -pg 1 -lvl 0 -x 0 -y 70 -defaultsOSRD
+preplace inst dma_data_mover -pg 1 -lvl 2 -x 490 -y 110 -defaultsOSRD
+preplace inst axi_data_mover_0 -pg 1 -lvl 1 -x 180 -y 140 -defaultsOSRD
+preplace netloc pcie_axi_aclk 1 0 2 20J 30 340
+preplace netloc pcie_axi_aresetn 1 0 2 30J 40 330
+preplace netloc data_mover_0_DST_AXI 1 2 1 NJ 90
+preplace netloc data_mover_0_SRC_AXI 1 2 1 NJ 110
+levelinfo -pg 1 0 180 490 660
+pagesize -pg 1 -db -bbox -sgen -100 -10 770 410
+"
+}
+

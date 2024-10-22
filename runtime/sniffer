@@ -1,0 +1,238 @@
+REG_BASE=0x1000
+   REG_CAPTURE=$((REG_BASE + 0 * 4))
+    REG_STATUS=$((REG_BASE + 1 * 4))
+REG_ETH_RESETN=$((REG_BASE + 2 * 4))
+  REG_OVERFLOW=$((REG_BASE + 3 * 4))
+
+
+# These are offsets to the packet counter registers
+PC0=0x4000
+PC1=0x5000
+PC2=0x6000
+PC3=0x7000
+      OFF_FD_PKTSH=$(( 0 * 4))
+      OFF_FD_PKTSL=$(( 1 * 4))
+      OFF_MD_PKTSH=$(( 2 * 4))
+      OFF_MD_PKTSL=$(( 3 * 4))
+      OFF_FC_PKTSH=$(( 4 * 4))
+      OFF_FC_PKTSL=$(( 5 * 4))
+ OFF_OTH_OUT_PKTSH=$(( 6 * 4))
+ OFF_OTH_OUT_PKTSL=$(( 7 * 4))
+     OFF_ABM_PKTSH=$(( 8 * 4))
+     OFF_ABM_PKTSL=$(( 9 * 4))
+  OFF_OTH_IN_PKTSH=$((10 * 4))
+  OFF_OTH_IN_PKTSL=$((11 * 4))
+     OFF_BAD_PKTSH=$((12 * 4))
+     OFF_BAD_PKTSL=$((13 * 4))
+
+
+# Ensure that the sniffer RTL design is loaded into the FPGA
+#if [ $(pcireg -dec 20) -ne 10202024 ]; then
+#    echo "The packet_capture bitstream is not loaded into the FPGA!"
+#    exit
+#fi
+
+# Are we starting a capture?
+if [ "$1" == "capture" ] || [ "$1" == "start" ]; then
+    pcireg $REG_CAPTURE 1
+    exit 0
+fi
+
+# Are we stopping a capture?
+if [ "$1" == "stop" ]; then
+    pcireg $REG_CAPTURE 0
+    exit 0
+fi
+
+# Are we resetting the entire Ethernet system?
+if [ "$1" == "eth_reset" ]; then
+   pcireg $REG_ETH_RESETN 0
+   sleep .001
+   pcireg $REG_ETH_RESETN 1
+   exit 0
+fi
+
+# Are we displaying the RAM & PCS status?
+if [ "$1" == "status" ]; then
+    pcireg -dec $REG_STATUS
+    exit 0
+fi
+
+# Are we displaying the overflow status?
+if [ "$1" == "overflow" ]; then
+    pcireg -dec $REG_OVERFLOW
+    exit 0
+fi
+
+# Are we dumping packets?
+if [ "$1" == "dump" ]; then
+
+    # Force unflushed packets to be flushed to RAM 
+    pcireg $REG_CAPTURE 0
+    sleep .1
+
+    # Determine how many packets to dump out
+    count=5000
+    test "$2" !=  "" && count=$2 
+
+    # Dump packets to disk from both channels
+    p3r_getpackets -ch 0 $count
+    p3r_getpackets -ch 1 $count
+    p3r_getpackets -ch 2 $count
+    p3r_getpackets -ch 3 $count
+
+    exit 0
+fi
+
+#
+# This function is used to display packet counts
+#
+show_packet_count01()
+{
+    offs=$2
+    a2=$(($PC0 + offs))
+    a3=$(($PC1 + offs))
+    v2=$(pcireg -wide -dec $a2)
+    v3=$(pcireg -wide -dec $a3)
+    printf "%15s: " "$1"
+    printf " %12u %12u\n" $v2 $v3
+
+}
+
+
+
+#
+# This function is used to display packet counts
+#
+show_packet_count23()
+{
+    offs=$2
+    a2=$(($PC2 + offs))
+    a3=$(($PC3 + offs))
+    v2=$(pcireg -wide -dec $a2)
+    v3=$(pcireg -wide -dec $a3)
+    printf "%15s: " "$1"
+    printf " %12u %12u\n" $v2 $v3
+
+}
+
+#
+#  This function computes the total number of packets for a given QSFP
+#  and a given category (category = SENT or RCVD)
+#
+get_packet_totals()
+{
+    local base=$1
+    local category=$2
+
+    # Determine the packet counts for each type of packet
+        fd_count=$(pcireg -wide -dec $((base + OFF_FD_PKTSH     )))
+        md_count=$(pcireg -wide -dec $((base + OFF_MD_PKTSH     )))
+        fc_count=$(pcireg -wide -dec $((base + OFF_FC_PKTSH     )))
+     othin_count=$(pcireg -wide -dec $((base + OFF_OTH_IN_PKTSH )))
+    othout_count=$(pcireg -wide -dec $((base + OFF_OTH_OUT_PKTSH)))
+       abm_count=$(pcireg -wide -dec $((base + OFF_ABM_PKTSH    )))
+       bad_count=$(pcireg -wide -dec $((base + OFF_BAD_PKTSH    )))       
+
+
+    # If this is QSFP_0 or QSFP_1, this is the packet total
+    if [ $((base)) -eq $((PC0)) ] || [ $((base)) -eq $((PC1)) ]; then
+        if [ $category == RCVD ]; then
+            total=$(( fd_count + md_count + fc_count + othin_count + bad_count ))
+            echo $total
+            return
+        else
+            total=$(( abm_count + othout_count ))
+            echo $total
+            return
+        fi
+    fi
+
+
+
+    # If this is QSFP_2 or QSFP_3, this is the packet total
+    if [ $((base)) -eq $((PC2)) ] || [ $((base)) -eq $((PC3)) ]; then
+        if [ $category == SENT ]; then
+            total=$(( fd_count + md_count + fc_count + othout_count ))
+            echo $total
+            return
+        else
+            total=$(( abm_count + othin_count + bad_count ))
+            echo $total
+            return
+        fi
+    fi
+
+}
+
+
+
+if [ $1 == "packets" ]; then
+    clear
+    
+    echo "---------------------------------------------"
+    echo "                        QSFP_0       QSFP_1"
+    echo "---------------------------------------------"
+
+    echo
+    echo "-=[ RCVD ]=-"
+    show_packet_count01 "fd_packets"    OFF_FD_PKTSH
+    show_packet_count01 "md_packets"    OFF_MD_PKTSH
+    show_packet_count01 "fc_packets"    OFF_FC_PKTSH
+    show_packet_count01 "other_packets" OFF_OTH_IN_PKTSH
+    show_packet_count01 "bad_packets"   OFF_BAD_PKTSH
+    total1=$(get_packet_totals $PC0 RCVD)
+    total2=$(get_packet_totals $PC1 RCVD)
+    printf "%17s ---------------------------\n" ""
+    printf "%17s %12u %12u\n" "" $total1 $total2
+    echo
+
+
+    echo "-=[ SENT ]=-"
+    show_packet_count01 "abm_packets"   OFF_ABM_PKTSH
+    show_packet_count01 "other_packets" OFF_OTH_OUT_PKTSH
+    total1=$(get_packet_totals $PC0 SENT)
+    total2=$(get_packet_totals $PC1 SENT)
+    printf "\n\n\n"
+
+
+
+    echo "---------------------------------------------"
+    echo "                        QSFP_2       QSFP_3"
+    echo "---------------------------------------------"
+
+    echo
+    echo "-=[ SENT ]=-"
+    show_packet_count23 "fd_packets"    OFF_FD_PKTSH
+    show_packet_count23 "md_packets"    OFF_MD_PKTSH
+    show_packet_count23 "fc_packets"    OFF_FC_PKTSH
+    show_packet_count23 "other_packets" OFF_OTH_OUT_PKTSH
+    total1=$(get_packet_totals $PC2 SENT)
+    total2=$(get_packet_totals $PC3 SENT)
+    printf "%17s ---------------------------\n" ""
+    printf "%17s %12u %12u\n" "" $total1 $total2
+    echo
+
+
+    echo "-=[ RCVD ]=-"
+    show_packet_count23 "abm_packets"   OFF_ABM_PKTSH
+    show_packet_count23 "other_packets" OFF_OTH_IN_PKTSH
+    show_packet_count23 "bad_packets"   OFF_BAD_PKTSH
+    total1=$(get_packet_totals $PC2 RCVD)
+    total2=$(get_packet_totals $PC3 RCVD)
+    printf "%17s --------------------------\n" ""
+    printf "%17s %12u %12u\n" "" $total1 $total2
+
+    echo
+    exit 0
+
+fi
+
+
+echo "usage:  sniffer start"
+echo "        sniffer stop"
+echo "        sniffer dump [packet_count]"
+echo "        sniffer eth_reset"
+echo "        sniffer overflow"
+echo "        sniffer status"
+echo "        sniffer packets"
