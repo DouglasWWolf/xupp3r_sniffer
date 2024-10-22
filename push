@@ -2,7 +2,7 @@ export project=project
 export folder=.
 
 cm clean
-rm runtime/*.pcap
+rm -rf runtime/*.pcap
 
 rm -rf ${project}.hw/webtalk/*
 rm -rf ${project}.hw/webtalk/\.x*
