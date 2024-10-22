@@ -1,5 +1,5 @@
 dest=bitstream
-base=xupp3r_packet_capture
+base=xupp3r_sniffer
 
 mkdir $dest 2>/dev/null
 
